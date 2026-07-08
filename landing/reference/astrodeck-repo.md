@@ -19,7 +19,8 @@ npm run build && npm run preview       # preview: http://localhost:4321/
 - node 18+ 필요(검증: node 22 / npm 10).
 - **캐시 포인트**: `astrodeck/` 재사용 → clone 생략, `node_modules` 재사용 → install 생략. 첫 실행만 무겁고(clone+install), 다음부터는 **빌드만(수 초)**. 아이디어 바뀌어도 데이터만 다시 교체 후 build.
 
-## 교체할 파일 = 4개 중 랜딩용 3개
+## 랜딩용 템플릿 3개 (이 중 **1개만** 골라 교체·빌드)
+3개가 유사해 전부 만들 필요 없다. 목적에 맞는 1개만(선택 기준 = landing SKILL.md "템플릿 선택").
 `src/pages/templates/` 안:
 - `startup.astro`  → **Startup룩** (검증용 최적: 경쟁비교+얼리어답터 포함)
 - `saas.astro`     → **SaaS룩** (가격티어+FAQ)
