@@ -12,8 +12,9 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
 - **채팅 출력은 짧게** — 프리뷰 주소 표 + 한 줄 안내. 방법론 설명 금지.
 - 상세 절차·컴포넌트 prop·함정은 `reference/astrodeck-repo.md` 참조(이게 메인).
 
-## 전제
-- `lean-canvas.md` + `key-copy.md` 읽기. 없으면 `/item-check`→`/key-copy` 먼저. 판정 ❌면 안 만듦.
+## 전제 (어느 아이디어인지 먼저)
+- `ideas/<slug>/lean-canvas.md` + `ideas/<slug>/key-copy.md` 를 읽는다. slug는 인자로 주면 그걸, 없으면 **가장 최근 수정된 `ideas/*/lean-canvas.md`**. 여러 개고 애매하면 물어본다.
+- 없으면 `/item-check`→`/key-copy` 먼저. 판정 ❌면 안 만듦.
 
 ## 순서
 1. **캔버스+카피 읽기** → 룩별 히어로 카피(key-copy 변형)와 데이터 초안 준비.
@@ -24,7 +25,8 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
    - 매핑·prop 치트시트는 참조파일 참고. 캔버스→데이터: UVP=Hero title/subtitle, Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials, 신호=CTA label.
 4. **빌드 & 프리뷰** — `npm run build` → `npm run preview`(백그라운드). 주소: `http://localhost:4321/templates/{startup|saas|portfolio}/`.
    - ⚠️ 빌드본은 절대경로라 file:// 직접 열기 X → 반드시 프리뷰 서버로.
-5. 렌더 확인(우리 카피가 dist에 들어갔는지 grep) 후 채팅 출력.
+5. 렌더 확인(우리 카피가 dist에 들어갔는지 grep). 빌드본 `dist/templates/{startup,saas,portfolio}/` 을
+   `ideas/<slug>/landing/` 으로 복사해 **아이디어별로 보존**(astrodeck 소스는 다음 아이디어에서 덮어써짐). 그 후 채팅 출력.
 
 ## 채팅 출력 형식 (짧게)
 ```

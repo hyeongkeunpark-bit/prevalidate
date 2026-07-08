@@ -29,10 +29,11 @@ cp -r prevalidate/item-check prevalidate/key-copy prevalidate/landing ~/.claude/
 흐름 (한 루프로 돎):
 ```
 아이디어
- └─ /item-check → lean-canvas.md (표)  ←──┐ 표 채울 때마다
-      └─ (준비됨) /key-copy → key-copy.md  ─┘ 다시 돌려 카피 최신화
-           └─ /landing → astrodeck 레포 클론→데이터 교체→빌드→프리뷰  (Startup·SaaS·Agency 3룩)
+ └─ /item-check <아이템> → ideas/<slug>/lean-canvas.md  ←──┐ 표 채울 때마다
+      └─ (준비됨) /key-copy <slug> → ideas/<slug>/key-copy.md ┘ 다시 돌려 카피 최신화
+           └─ /landing <slug> → astrodeck 클론→데이터 교체→빌드→프리뷰 (+ ideas/<slug>/landing/)
 ```
+> **아이디어별 폴더 `ideas/<slug>/`** 에 저장 — 여러 아이디어를 나란히 두고 비교. slug는 item-check가 정하고, 이후 스킬은 인자로 받거나 가장 최근 것을 이어받는다. (고정 파일명으로 덮어쓰지 않음)
 > ③ landing은 실제 astrodeck 레포(MIT)를 클론해 **컴포넌트·스타일은 그대로 두고 데이터만 교체**한 뒤 `npm run build`→`preview`로 확인한다(원본 룩 100% 유지). 절차·컴포넌트 prop·함정은 `landing/reference/astrodeck-repo.md`에 박제. 네트워크/npm 불가 시엔 `astrodeck-templates.md` 요약으로 단일 HTML 재현(폴백).
 - **item-check**: 경쟁사·차별점처럼 내가 모르는 니치 사실은 **지어내지 않고** "가서 이걸 확인하라" 힌트만.
 - **key-copy**: "실제 사이트 4개 주고 우리 기획에 맞춰 새로 써줘 → 스타일 다양한 카피가 나와 좋았다"는 경험을 스킬화. 레퍼런스 사이트 N개의 보이스를 추출해 우리 메시지를 각 보이스로.
