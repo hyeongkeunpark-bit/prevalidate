@@ -24,16 +24,16 @@ cp -r prevalidate/item-check prevalidate/key-copy prevalidate/landing ~/.claude/
 |---|---|---|
 | ① | **item-check** | 린캔버스 9칸을 **표**로 채우기 → 빈 칸=갭 코칭 → **착수 준비 완료 / 조건부 / 아직 이르다** 판정. 칸마다 **내가 초안 낼 것 🤖 / 당신이 리서치할 것 🙋**(경쟁사 등)을 구분 — 모르는 건 지어내지 않고 짧은 리서치 힌트. 수요 칸 근거 태그 |
 | ② | **key-copy** | 채운 캔버스(내용) × **레퍼런스 사이트별 보이스**(스타일)로 키카피 **N개**(기본 5). 캔버스가 갱신되면 다시 돌려 최신화 |
-| ③ | **landing** | 캔버스+카피 → **astrodeck 랜딩 4종**(Startup·SaaS·Portfolio·Home)을 각각 **단일 HTML 샘플**로. 하나 고르지 않고 4룩 제시 |
+| ③ | **landing** | 캔버스+카피 → **실제 astrodeck 레포(MIT) 클론 → 데이터만 교체 → 빌드**로 랜딩 3룩(Startup·SaaS·Agency) 제시. 원본 룩·다크모드·인터랙션 그대로. 하나 고르지 않음 |
 
 흐름 (한 루프로 돎):
 ```
 아이디어
  └─ /item-check → lean-canvas.md (표)  ←──┐ 표 채울 때마다
       └─ (준비됨) /key-copy → key-copy.md  ─┘ 다시 돌려 카피 최신화
-           └─ /landing → landing-{startup,saas,portfolio,home}.html  (4룩, 단일 HTML)
+           └─ /landing → astrodeck 레포 클론→데이터 교체→빌드→프리뷰  (Startup·SaaS·Agency 3룩)
 ```
-> ③ landing은 astrodeck(MIT) 4종 룩을 **단일 HTML로 재현**한다(Astro 빌드 불필요). 룩·토큰은 `landing/reference/astrodeck-templates.md`에 박제.
+> ③ landing은 실제 astrodeck 레포(MIT)를 클론해 **컴포넌트·스타일은 그대로 두고 데이터만 교체**한 뒤 `npm run build`→`preview`로 확인한다(원본 룩 100% 유지). 절차·컴포넌트 prop·함정은 `landing/reference/astrodeck-repo.md`에 박제. 네트워크/npm 불가 시엔 `astrodeck-templates.md` 요약으로 단일 HTML 재현(폴백).
 - **item-check**: 경쟁사·차별점처럼 내가 모르는 니치 사실은 **지어내지 않고** "가서 이걸 확인하라" 힌트만.
 - **key-copy**: "실제 사이트 4개 주고 우리 기획에 맞춰 새로 써줘 → 스타일 다양한 카피가 나와 좋았다"는 경험을 스킬화. 레퍼런스 사이트 N개의 보이스를 추출해 우리 메시지를 각 보이스로.
 
