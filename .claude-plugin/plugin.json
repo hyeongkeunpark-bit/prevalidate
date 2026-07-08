@@ -1,7 +1,7 @@
 {
   "name": "prevalidate",
   "version": "0.1.0",
-  "description": "만들기 전에 아이템부터 점검하는 스킬 묶음. (1) item-check: 검증하려는 사업/서비스 아이템이 적절한지(검증할 가치·검증 가능성) 판정. (2) key-copy: 테스트용 키카피 N개 추출. 카피 크래프트는 premium-marketing·brand-story에 위임.",
+  "description": "만들기 전에 아이템부터 점검하는 스킬 묶음. (1) item-check: 린캔버스(Lean Canvas)로 아이템이 랜딩 검증 착수 준비가 됐는지 판정, 빈 칸=부족한 점 코칭, 수요 칸 근거태그. (2) key-copy: 채운 캔버스의 UVP·Problem 칸에서 키카피 N개 추출. Mom Test·RAT는 칸 채우는 도구로 스며듦. 카피 크래프트는 premium-marketing·brand-story에 위임.",
   "author": {
     "name": "hyeongkeunpark-bit",
     "url": "https://github.com/hyeongkeunpark-bit"
