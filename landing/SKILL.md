@@ -20,11 +20,11 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
 
 ## 순서
 1. **캔버스+카피 읽기** → 룩별 히어로 카피(key-copy 변형)와 데이터 초안 준비.
-2. **레포 준비** (`reference/astrodeck-repo.md` 셋업 블록 그대로):
-   `git clone --depth 1 https://github.com/holger1411/astrodeck.git astrodeck` → `cd astrodeck` → `npm install`.
-   (이미 `astrodeck/` 있으면 재사용.)
+2. **레포 준비 (캐시 재사용)** — cwd에서: `astrodeck/` 있으면 **clone 생략**, `astrodeck/node_modules` 있으면 **install 생략**. 반복 실행 시 빌드만 돌아 수 초로 끝난다(최초만 clone+install ~수십 초~수 분).
+   `[ -d astrodeck ] || git clone --depth 1 …astrodeck` → `cd astrodeck` → `[ -d node_modules ] || npm install`.
 3. **데이터 교체** — `src/pages/templates/` 의 `startup.astro`·`saas.astro`·`portfolio.astro` 상단 JS 객체와 히어로/CTA 카피를 우리 내용으로. 컴포넌트·CSS는 손대지 않음.
    - 매핑·prop 치트시트는 참조파일 참고. 캔버스→데이터: UVP=Hero title/subtitle, Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials, 신호=CTA label.
+3b. **브랜딩 정리** — Logo/Header/Footer 3파일의 "AstroDeck"·기본 네비·푸터를 **서비스명·랜딩 앵커**로 교체(참조파일 "브랜딩 정리" 블록). 3룩 공용이라 **한 번만** 고치면 전부 반영.
 4. **빌드 & 프리뷰** — `npm run build` → `npm run preview`(백그라운드). 주소: `http://localhost:4321/templates/{startup|saas|portfolio}/`.
    - ⚠️ 빌드본은 절대경로라 file:// 직접 열기 X → 반드시 프리뷰 서버로.
 5. 렌더 확인(우리 카피가 dist에 들어갔는지 grep). 빌드본 `dist/templates/{startup,saas,portfolio}/` 을
@@ -38,11 +38,11 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
 - SaaS                   http://localhost:4321/templates/saas/
 - Agency                 http://localhost:4321/templates/portfolio/
 → 3개 열어보고 택1. 수치·후기·로고·가격은 [플레이스홀더](교체 필요).
-참고: 헤더/푸터는 astrodeck 기본 브랜딩 — 실서비스면 로고/네비 정리 필요.
+참고: 헤더/푸터 브랜딩은 서비스명으로 정리됨. 로고 아이콘(카드덱)은 astrodeck 기본 — 실로고 있으면 교체.
 ```
 
 ## 다음
-고른 1룩 → 브랜딩(로고/네비/푸터) 정리 + 이미지·문구 다듬기 → (있으면) `landing-visuals`.
+고른 1룩 → 실로고·이미지·문구 다듬기 → (있으면) `landing-visuals`.
 Astro 정적 빌드라 `dist/` 를 어떤 정적 호스팅에도 바로 배포.
 
 ## 폴백

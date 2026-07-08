@@ -7,17 +7,17 @@
 - 스택: Astro. 템플릿 페이지는 **데이터 주도형** — 각 `.astro` 상단 프론트매터에 JS 객체(features/testimonials/faqs/tiers…)를 정의하고, 그걸 섹션 컴포넌트에 props로 넘긴다.
 - **컴포넌트·스타일·CSS는 절대 건드리지 않는다. 데이터 배열과 히어로/CTA 카피만 우리 내용으로 교체.**
 
-## 셋업 & 빌드 (검증된 순서)
+## 셋업 & 빌드 (캐시 재사용 — 반복 실행 빠름)
 ```bash
-cd "<프로젝트 디렉토리>"
-git clone --depth 1 https://github.com/holger1411/astrodeck.git astrodeck
+cd "<프로젝트 디렉토리>"                 # 사용자 cwd. .claude/skills 안이면 안 됨
+[ -d astrodeck ] || git clone --depth 1 https://github.com/holger1411/astrodeck.git astrodeck  # 있으면 생략
 cd astrodeck
-npm install --no-audit --no-fund      # ~6s, 약 549패키지
-# (여기서 templates/*.astro 데이터 교체)
-npm run build                          # ~2s
-npm run preview                        # http://localhost:4321/
+[ -d node_modules ] || npm install --no-audit --no-fund   # 최초 1회만 (~549패키지)
+# (여기서 templates/*.astro 데이터 교체 + 브랜딩 정리)
+npm run build && npm run preview       # preview: http://localhost:4321/
 ```
 - node 18+ 필요(검증: node 22 / npm 10).
+- **캐시 포인트**: `astrodeck/` 재사용 → clone 생략, `node_modules` 재사용 → install 생략. 첫 실행만 무겁고(clone+install), 다음부터는 **빌드만(수 초)**. 아이디어 바뀌어도 데이터만 다시 교체 후 build.
 
 ## 교체할 파일 = 4개 중 랜딩용 3개
 `src/pages/templates/` 안:
@@ -67,15 +67,20 @@ Newsletter    { title, description, placeholder, buttonText }
 - subtitle/description에 `<mark>` 로 핵심구 강조 가능(Hero류).
 - CTA href는 검증 링크(사전신청 폼/문의) 또는 `#`.
 
+## 브랜딩 정리 (3파일 — 데이터 교체와 함께 매번, 3룩 공용이라 1회면 전부 반영)
+astrodeck엔 중앙 config가 없어 브랜딩이 하드코딩. 안 고치면 "AstroDeck" 데모처럼 보임.
+서비스명 = 캔버스 하이레벨 컨셉의 브랜드(예: "리핏"). 없으면 `[서비스명]` 플레이스홀더.
+1. **`src/components/Logo.astro`** — 맨 아래 워드마크 `{showText && <span …>AstroDeck</span>}` 의 **"AstroDeck" → 서비스명**. (SVG 카드덱 아이콘은 그대로 두거나 실로고 있으면 교체)
+2. **`src/components/Header.astro`** — `navItems` 배열을 **랜딩 앵커**로 교체:
+   `const navItems = [{ href: '#features', label: '기능' }, { href: '#pricing', label: '가격' }, { href: '#cta', label: '사전신청' }];`
+   (해당 앵커 id가 페이지에 없으면 있는 섹션 id에 맞추거나 항목 뺀다.)
+3. **`src/components/Footer.astro`** — `footerLinks` 를 최소화(랜딩 앵커만) + `"Open-source Astro.js starter kit…"` 태그라인 → **서비스 한 줄 소개**, `"AstroDeck"` 헤딩 → 서비스명.
+
 ## 함정 (겪은 것)
 1. **빌드 산출물은 절대경로(`/…`)로 에셋 참조** → `dist/**/index.html` 을 file:// 로 직접 열면 CSS 깨짐.
    반드시 `npm run preview`(localhost:4321) 로 확인. 정적 호스팅 배포는 정상.
    프리뷰 주소: `http://localhost:4321/templates/{startup|saas|portfolio}/`
-2. **브랜딩은 중앙 config가 없다** — 하드코딩:
-   - 로고 워드마크: `src/components/Logo.astro` (기본 "AstroDeck" 텍스트)
-   - 헤더 GitHub 링크: `src/components/Header.astro`
-   - 푸터 브랜드/링크: `src/components/Footer.astro`
-   기본 헤더 네비(Sections·Templates·Docs…)가 남아 있으니, 실서비스면 로고/네비/푸터를 손봐야 한다(선택).
+2. **브랜딩은 중앙 config가 없다** → 위 "브랜딩 정리" 3파일을 반드시 실행.
 3. guard-conventions 훅 + `npm run check:kpis` 가 있지만 데이터만 바꾸면 빌드 통과.
 4. `git clone` 시 `.git` 이 딸려온다. 우리 프로젝트에 커밋할 거면 `astrodeck/.git` 정리 고려.
 
