@@ -24,7 +24,7 @@ cp -r prevalidate/item-check prevalidate/key-copy prevalidate/landing ~/.claude/
 |---|---|---|
 | ① | **item-check** | 린캔버스 9칸을 **표**로 채우기 → 빈 칸=갭 코칭 → **착수 준비 완료 / 조건부 / 아직 이르다** 판정. 칸마다 **내가 초안 낼 것 🤖 / 당신이 리서치할 것 🙋**(경쟁사 등)을 구분 — 모르는 건 지어내지 않고 짧은 리서치 힌트. 수요 칸 근거 태그 |
 | ② | **key-copy** | 채운 캔버스를 **서로 다른 카피 스타일**(구어체·안심형/손실 강조형 등)로 키카피 **N개**(기본 5). 라벨에 회사명 X → 스타일로. 레퍼런스 사이트 주면 톤 참고. 캔버스 갱신 시 최신화 |
-| ③ | **landing** | 캔버스+카피 → **실제 astrodeck 레포(MIT) 클론 → 데이터만 교체 → 빌드**. Startup·SaaS·Agency 중 **목적에 맞는 1개**를 골라 1장 제작(3개가 비슷 — 다 안 만듦, 사용자 지정 가능). 원본 룩·다크모드·인터랙션 그대로 + 브랜딩 자동정리 |
+| ③ | **landing** | 캔버스+카피 → **우리 랜딩 베이스([prevalidate-landing](https://github.com/hyeongkeunpark-bit/prevalidate-landing), astrodeck MIT 포크) 클론 → 데이터 교체 → 빌드**. Startup·SaaS·Agency 중 **목적에 맞는 1개** 제작(사용자 지정 가능). **신청 폼 내장 → 구글시트로 신청자 수집**(리스트/대시보드). 브랜딩 자동정리 |
 
 흐름 (한 루프로 돎):
 ```
