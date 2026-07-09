@@ -24,11 +24,14 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
 - **Agency(portfolio)** — 서비스·에이전시·수주형(프로젝트 기반), 팀·클라이언트가 신뢰 요소인 경우.
 
 ## 순서
-1. **캔버스+카피 읽기 + 템플릿 1개 선택** → 위 기준으로 목적에 맞는 하나(startup|saas|portfolio) 결정. 사용자가 지정했으면 그걸로. **왜 골랐는지 한 줄** 준비.
+1. **캔버스+카피 읽기 + 템플릿 1개 + 히어로 키카피 1개 선택**
+   - 룩: 위 기준으로 하나 결정(사용자 지정 우선).
+   - **히어로 카피**: `key-copy.md` N개 중 **1개**를 히어로 헤드라인으로 쓴다. 사용자가 번호 지정 시 그것, 아니면 **고른 룩에 맞는 스타일**을 자동 선택(예: SaaS→간결·스펙형, Startup→문제 직격).
+   - **룩·카피 왜 골랐는지 한 줄** 준비(둘 다 나중에 밝힘).
 2. **레포 준비 (캐시 재사용)** — cwd에서: `prevalidate-landing/` 있으면 **clone 생략**, `node_modules` 있으면 **install 생략**. 최초만 clone+install, 이후엔 빌드만(수 초).
    `[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git` → `cd prevalidate-landing` → `[ -d node_modules ] || npm install`.
 3. **데이터 교체 (고른 1개만)** — `src/pages/templates/<선택>.astro` 상단 JS 객체와 히어로/CTA 카피를 우리 내용으로. 컴포넌트·CSS는 안 건드림. **나머지 2개 템플릿·신청 폼(Signup)은 손대지 않는다**(CTA는 이미 `#signup`로 연결됨).
-   - 매핑·prop 치트시트는 참조파일. 캔버스→데이터: UVP=Hero title/subtitle, Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials, 신호=CTA label.
+   - 매핑·prop 치트시트는 참조파일. **Hero title = 선택한 키카피**(지정/자동), subtitle = UVP 보조 문구. Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials, 신호=CTA label.
 3b. **브랜딩 정리** — Logo/Header/Footer 3파일의 "AstroDeck"·기본 네비·푸터를 **서비스명·랜딩 앵커**로 교체(참조파일 "브랜딩 정리" 블록).
 3c. **신청 저장 연결** — 사용자에게 구글 Apps Script 웹앱 URL을 묻는다. 있으면 `.env` 에 `PUBLIC_SIGNUP_ENDPOINT=<URL>` 기록. 없으면 `google-sheet/SETUP.md`(5분 세팅) 안내 후 그대로 진행 — 폼은 동작하되 저장 안 됨.
 4. **빌드 & 프리뷰** — `npm run build` → `npm run preview`(백그라운드). 주소: `http://localhost:4321/templates/<선택>/`.
@@ -41,6 +44,7 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
 ✅ <선택>룩으로 검증용 랜딩 생성 (데이터만 교체, 원본 룩 유지)
 프리뷰: http://localhost:4321/templates/<선택>/
 왜 이 룩: <한 줄 이유>
+히어로 카피: #<N> <스타일>  (다른 카피로 바꾸려면 번호만 말하세요)
 신청 저장: #signup 폼 → 구글시트  [연결됨 / 미설정 시 google-sheet/SETUP.md 5분]
 → 수치·후기·로고·가격은 [플레이스홀더](교체 필요). 다른 룩 원하면 말해주세요.
 ```
