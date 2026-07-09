@@ -71,11 +71,11 @@ Newsletter    { title, description, placeholder, buttonText }
 
 ## 브랜딩 정리 (3파일 — 데이터 교체와 함께 매번, 3룩 공용이라 1회면 전부 반영)
 astrodeck엔 중앙 config가 없어 브랜딩이 하드코딩. 안 고치면 "AstroDeck" 데모처럼 보임.
-서비스명 = 캔버스 하이레벨 컨셉의 브랜드(예: "리핏"). 없으면 `[서비스명]` 플레이스홀더.
+서비스명 = 캔버스 컨셉의 브랜드. **없으면 컨셉에서 짧은 임시 서비스명 1개를 생성**(예: "펫리마인드"). **`[서비스명]`을 최종 출력에 남기지 말 것** — 모든 위치(Logo·Footer·`<title>`·CTA 카피)에서 치환.
 1. **`src/components/Logo.astro`** — 맨 아래 워드마크 `{showText && <span …>AstroDeck</span>}` 의 **"AstroDeck" → 서비스명**. (SVG 카드덱 아이콘은 그대로 두거나 실로고 있으면 교체)
 2. **`src/components/Header.astro`** — `navItems` 배열을 **랜딩 앵커**로 교체:
-   `const navItems = [{ href: '#features', label: '기능' }, { href: '#pricing', label: '가격' }, { href: '#cta', label: '사전신청' }];`
-   (해당 앵커 id가 페이지에 없으면 있는 섹션 id에 맞추거나 항목 뺀다.)
+   `const navItems = [{ href: '#features', label: '기능' }, { href: '#signup', label: '신청' }];`
+   (해당 앵커 id가 페이지에 없으면 있는 섹션 id에 맞추거나 항목 뺀다. **GitHub 버튼은 포크에서 이미 제거됨** — 추가 조치 불필요.)
 3. **`src/components/Footer.astro`** — `footerLinks` 를 최소화(랜딩 앵커만) + `"Open-source Astro.js starter kit…"` 태그라인 → **서비스 한 줄 소개**, `"AstroDeck"` 헤딩 → 서비스명.
 
 ## 함정 (겪은 것)
