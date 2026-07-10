@@ -28,12 +28,15 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
    - 룩: 위 기준으로 하나 결정(사용자 지정 우선).
    - **히어로 카피(=랜딩 메인 하이라이트)**: `key-copy.md` N개 중 **정확히 1개**를 골라 **Hero title**(가장 큰 헤드라인)로 쓴다. 사용자가 번호 지정 시 그것, 아니면 **고른 룩에 맞는 스타일**을 자동 선택(예: SaaS→간결·스펙형, Startup→문제 직격). subtitle은 UVP 보조 문구 + `<mark>`로 핵심구 강조.
    - **룩·카피 왜 골랐는지 한 줄** 준비(둘 다 나중에 밝힘).
-2. **베이스 캐시 준비 (한 번만, 아이디어 공유)** — cwd에서 `prevalidate-landing/`은 **원본 소스+node_modules 저장소**로만 쓴다(여기서 빌드하지 않음).
-   `[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git` → `cd prevalidate-landing` → `[ -d node_modules ] || npm install` → `git checkout -- src/`(항상 중립 원본 유지) → `cd ..`.
-2b. **아이디어별 작업본 만들기 (독립 — 기존 결과물 안 건드림)** — `ideas/<slug>/site/` 에 베이스를 복사한다. node_modules는 무거우니 **심링크로 공유**:
-   `mkdir -p ideas/<slug>/site` → `rsync -a --exclude node_modules --exclude .git --exclude dist prevalidate-landing/ ideas/<slug>/site/` → `ln -sfn "$(pwd)/prevalidate-landing/node_modules" ideas/<slug>/site/node_modules`.
+2. **베이스 캐시 준비 (항상 최신으로)** — cwd에서 `prevalidate-landing/`은 **원본 소스+node_modules 저장소**로만 쓴다(여기서 빌드하지 않음).
+   - 없으면 clone: `git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git`.
+   - **있으면 반드시 최신으로 갱신**(안 하면 옛 원본이 복원돼 영어 astrodeck에서 시작함): `git -C prevalidate-landing fetch -q --depth 1 origin main && git -C prevalidate-landing reset -q --hard origin/main`.
+   - `cd prevalidate-landing` → `[ -d node_modules ] || npm install` → `cd ..`. (node_modules는 gitignore라 reset에도 보존)
+2b. **아이디어별 작업본 만들기 (독립 — 기존 결과물 안 건드림)** — `ideas/<slug>/site/` 에 베이스를 복사. node_modules는 심링크 공유, **`.env`는 복사 안 함**(아이디어마다 자기 시트):
+   `mkdir -p ideas/<slug>/site` → `rsync -a --exclude node_modules --exclude .git --exclude dist --exclude .env prevalidate-landing/ ideas/<slug>/site/` → `ln -sfn "$(pwd)/prevalidate-landing/node_modules" ideas/<slug>/site/node_modules`.
    - 이후 모든 편집·빌드·프리뷰는 **`ideas/<slug>/site/` 안에서**. 다른 아이디어(`ideas/*/site/`)는 그대로 살아있다(덮어쓰기 0, 프리뷰 동시 가능).
-   - 재실행이라 `ideas/<slug>/site/`가 이미 있으면: `.env`(엔드포인트)만 남기고 `git -C ideas/<slug>/site checkout -- src/`로 리셋 후 재사용.
+   - 재실행이라 `ideas/<slug>/site/`가 이미 있으면: `.env`(그 아이디어 전용 엔드포인트)만 남기고 `git -C ideas/<slug>/site checkout -- src/`로 리셋 후 재사용.
+   - ⚠️ 새 site의 `.env`는 **비어 있음**(3c에서 이 아이디어 전용 시트를 새로 연결). 이전 아이디어 시트를 재사용하려면 사용자가 그 URL을 다시 주면 됨.
 3. **데이터 교체 (고른 1개만, `ideas/<slug>/site/` 안에서)** — `src/pages/templates/<선택>.astro` 상단 JS 객체와 히어로/CTA 카피를 우리 내용으로. 컴포넌트·CSS는 안 건드림. **나머지 2개 템플릿·신청 폼(Signup)은 손대지 않는다**(CTA는 이미 `#signup`로 연결됨).
    - 매핑·prop 치트시트는 참조파일. **Hero title = 선택한 키카피**(지정/자동), subtitle = UVP 보조 문구. Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials.
    - **CTA 라벨** (hero primaryCta · 최종 CTA · `<Signup title=… buttonText=… />` 를 **일치**시킴): 아이템에 맞게 — **B2B·영업형 → "도입 상담 신청"**, **셀프서브 제품 → "먼저 써보기 신청"**. 약한 "문의하기/신청하기" 단독은 쓰지 말 것.

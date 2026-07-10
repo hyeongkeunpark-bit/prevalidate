@@ -12,16 +12,20 @@
 그래야 한 폴더에서 아이디어 N개를 돌려도 결과물·프리뷰가 각자 살아있다(덮어쓰기 0).
 ```bash
 cd "<프로젝트 디렉토리>"                 # 사용자 cwd. .claude/skills 안이면 안 됨
-# 1) 베이스 캐시 (한 번만)
-[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git
+# 1) 베이스 캐시 — 항상 최신으로(안 하면 옛 원본이 복원돼 영어 astrodeck에서 시작)
+if [ -d prevalidate-landing ]; then
+  git -C prevalidate-landing fetch -q --depth 1 origin main && git -C prevalidate-landing reset -q --hard origin/main
+else
+  git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git
+fi
 cd prevalidate-landing && [ -d node_modules ] || npm install --no-audit --no-fund
-git checkout -- src/ && cd ..           # 원본 소스 항상 중립 유지
-# 2) 아이디어별 작업본 (독립) — node_modules는 심링크로 공유(무거움)
+cd ..                                    # node_modules는 gitignore라 reset에도 보존
+# 2) 아이디어별 작업본 (독립) — node_modules 심링크 공유, .env는 복사 안 함(아이디어별 시트)
 mkdir -p ideas/<slug>/site
-rsync -a --exclude node_modules --exclude .git --exclude dist prevalidate-landing/ ideas/<slug>/site/
+rsync -a --exclude node_modules --exclude .git --exclude dist --exclude .env prevalidate-landing/ ideas/<slug>/site/
 ln -sfn "$(pwd)/prevalidate-landing/node_modules" ideas/<slug>/site/node_modules
 cd ideas/<slug>/site
-cp -n .env.example .env                 # PUBLIC_SIGNUP_ENDPOINT (구글시트 URL, google-sheet/SETUP.md)
+cp -n .env.example .env                 # 빈 템플릿 → 3c에서 이 아이디어 전용 시트 연결
 # (여기서 templates/<선택>.astro 데이터 교체 + 브랜딩 정리)
 npm run build && npm run preview -- --port <빈포트>   # 4321 점유되면 4322…
 ```
