@@ -7,19 +7,28 @@
 - 스택: Astro. 템플릿 페이지는 **데이터 주도형** — 각 `.astro` 상단 프론트매터에 JS 객체(features/testimonials/faqs/tiers…)를 정의하고, 그걸 섹션 컴포넌트에 props로 넘긴다.
 - **컴포넌트·스타일·CSS는 절대 건드리지 않는다. 데이터 배열과 히어로/CTA 카피만 우리 내용으로 교체.**
 
-## 셋업 & 빌드 (캐시 재사용 — 반복 실행 빠름)
+## 셋업 & 빌드 (아이디어별 독립 작업본 — 기존 결과물 유지)
+베이스 캐시는 원본+node_modules 저장소로만 쓰고, **아이디어마다 `ideas/<slug>/site/`에서 빌드**한다.
+그래야 한 폴더에서 아이디어 N개를 돌려도 결과물·프리뷰가 각자 살아있다(덮어쓰기 0).
 ```bash
 cd "<프로젝트 디렉토리>"                 # 사용자 cwd. .claude/skills 안이면 안 됨
-[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git  # 있으면 생략
-cd prevalidate-landing
-[ -d node_modules ] || npm install --no-audit --no-fund   # 최초 1회만
-cp -n .env.example .env                # PUBLIC_SIGNUP_ENDPOINT 채우기(구글시트 URL, google-sheet/SETUP.md)
+# 1) 베이스 캐시 (한 번만)
+[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git
+cd prevalidate-landing && [ -d node_modules ] || npm install --no-audit --no-fund
+git checkout -- src/ && cd ..           # 원본 소스 항상 중립 유지
+# 2) 아이디어별 작업본 (독립) — node_modules는 심링크로 공유(무거움)
+mkdir -p ideas/<slug>/site
+rsync -a --exclude node_modules --exclude .git --exclude dist prevalidate-landing/ ideas/<slug>/site/
+ln -sfn "$(pwd)/prevalidate-landing/node_modules" ideas/<slug>/site/node_modules
+cd ideas/<slug>/site
+cp -n .env.example .env                 # PUBLIC_SIGNUP_ENDPOINT (구글시트 URL, google-sheet/SETUP.md)
 # (여기서 templates/<선택>.astro 데이터 교체 + 브랜딩 정리)
-npm run build && npm run preview       # preview: http://localhost:4321/
+npm run build && npm run preview -- --port <빈포트>   # 4321 점유되면 4322…
 ```
 - node 18+ 필요(검증: node 22 / npm 10).
-- **캐시 포인트**: `prevalidate-landing/` 재사용 → clone 생략, `node_modules` 재사용 → install 생략. 첫 실행만 무겁고, 다음부터는 **빌드만(수 초)**.
-- ⚠️ **캐시 재사용 시 이전 아이디어 오염 주의**: 폴더에 지난 아이디어 데이터가 박혀 있으니, 데이터 교체 전에 `git checkout -- src/` 로 중립 원본 복원 후 새로 채운다(놓친 필드에 지난 서비스명·문구가 남는 것 방지). `.env`(엔드포인트)는 git 추적 안 되니 보존됨.
+- **빠른 이유**: node_modules는 심링크 공유라 install 반복 없음. 아이디어별로 소스만 복사(가벼움) + 빌드만(수 초).
+- **재실행**(같은 slug): `ideas/<slug>/site/`가 있으면 `.env`만 두고 `git -C ideas/<slug>/site checkout -- src/`로 리셋 후 재사용.
+- **독립성**: `ideas/A/site`와 `ideas/B/site`는 완전 분리 → 프리뷰를 서로 다른 포트로 **동시에** 띄울 수 있다.
 
 ## 랜딩용 템플릿 3개 (이 중 **1개만** 골라 교체·빌드)
 3개가 유사해 전부 만들 필요 없다. 목적에 맞는 1개만(선택 기준 = landing SKILL.md "템플릿 선택").
@@ -81,8 +90,8 @@ astrodeck엔 중앙 config가 없어 브랜딩이 하드코딩. 안 고치면 "A
 
 ## 함정 (겪은 것)
 1. **빌드 산출물은 절대경로(`/…`)로 에셋 참조** → `dist/**/index.html` 을 file:// 로 직접 열면 CSS 깨짐.
-   반드시 `npm run preview`(localhost:4321) 로 확인. 정적 호스팅 배포는 정상.
-   프리뷰 주소: `http://localhost:4321/templates/{startup|saas|portfolio}/`
+   반드시 `npm run preview`(빈 포트) 로 확인. 정적 호스팅 배포는 정상.
+   프리뷰 주소: `http://localhost:<포트>/templates/{startup|saas|portfolio}/`
 2. **브랜딩은 중앙 config가 없다** → 위 "브랜딩 정리" 3파일을 반드시 실행.
 3. 포크는 astrodeck 개발하네스(.claude 훅·AGENTS.md 등)를 **제거**함 → 편집이 훅에 막히지 않음.
 4. **신청 저장**: `.env` 의 `PUBLIC_SIGNUP_ENDPOINT`(구글 Apps Script 웹앱 URL). 미설정 시 폼은 동작하되 저장 안 됨. 세팅=`google-sheet/SETUP.md`(구글시트+스크립트 붙여넣기+배포).

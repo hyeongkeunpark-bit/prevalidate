@@ -28,10 +28,13 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
    - 룩: 위 기준으로 하나 결정(사용자 지정 우선).
    - **히어로 카피(=랜딩 메인 하이라이트)**: `key-copy.md` N개 중 **정확히 1개**를 골라 **Hero title**(가장 큰 헤드라인)로 쓴다. 사용자가 번호 지정 시 그것, 아니면 **고른 룩에 맞는 스타일**을 자동 선택(예: SaaS→간결·스펙형, Startup→문제 직격). subtitle은 UVP 보조 문구 + `<mark>`로 핵심구 강조.
    - **룩·카피 왜 골랐는지 한 줄** 준비(둘 다 나중에 밝힘).
-2. **레포 준비 (캐시 재사용)** — cwd에서: `prevalidate-landing/` 있으면 **clone 생략**, `node_modules` 있으면 **install 생략**. 최초만 clone+install, 이후엔 빌드만(수 초).
-   `[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git` → `cd prevalidate-landing` → `[ -d node_modules ] || npm install`.
-   - ⚠️ **캐시 재사용이면 이전 아이디어 데이터 리셋 필수**: `git checkout -- src/` 로 `src/`(templates·Logo·Header·Footer·SEO)를 **중립 원본으로 되돌린 뒤** 새 아이디어를 채운다. 안 그러면 지난 아이디어 잔재(예: 이전 서비스명·문구)가 놓친 필드에 남는다. `.env`는 git 추적 안 되니 **엔드포인트는 보존**됨(재입력 불필요).
-3. **데이터 교체 (고른 1개만)** — `src/pages/templates/<선택>.astro` 상단 JS 객체와 히어로/CTA 카피를 우리 내용으로. 컴포넌트·CSS는 안 건드림. **나머지 2개 템플릿·신청 폼(Signup)은 손대지 않는다**(CTA는 이미 `#signup`로 연결됨).
+2. **베이스 캐시 준비 (한 번만, 아이디어 공유)** — cwd에서 `prevalidate-landing/`은 **원본 소스+node_modules 저장소**로만 쓴다(여기서 빌드하지 않음).
+   `[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git` → `cd prevalidate-landing` → `[ -d node_modules ] || npm install` → `git checkout -- src/`(항상 중립 원본 유지) → `cd ..`.
+2b. **아이디어별 작업본 만들기 (독립 — 기존 결과물 안 건드림)** — `ideas/<slug>/site/` 에 베이스를 복사한다. node_modules는 무거우니 **심링크로 공유**:
+   `mkdir -p ideas/<slug>/site` → `rsync -a --exclude node_modules --exclude .git --exclude dist prevalidate-landing/ ideas/<slug>/site/` → `ln -sfn "$(pwd)/prevalidate-landing/node_modules" ideas/<slug>/site/node_modules`.
+   - 이후 모든 편집·빌드·프리뷰는 **`ideas/<slug>/site/` 안에서**. 다른 아이디어(`ideas/*/site/`)는 그대로 살아있다(덮어쓰기 0, 프리뷰 동시 가능).
+   - 재실행이라 `ideas/<slug>/site/`가 이미 있으면: `.env`(엔드포인트)만 남기고 `git -C ideas/<slug>/site checkout -- src/`로 리셋 후 재사용.
+3. **데이터 교체 (고른 1개만, `ideas/<slug>/site/` 안에서)** — `src/pages/templates/<선택>.astro` 상단 JS 객체와 히어로/CTA 카피를 우리 내용으로. 컴포넌트·CSS는 안 건드림. **나머지 2개 템플릿·신청 폼(Signup)은 손대지 않는다**(CTA는 이미 `#signup`로 연결됨).
    - 매핑·prop 치트시트는 참조파일. **Hero title = 선택한 키카피**(지정/자동), subtitle = UVP 보조 문구. Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials.
    - **CTA 라벨** (hero primaryCta · 최종 CTA · `<Signup title=… buttonText=… />` 를 **일치**시킴): 아이템에 맞게 — **B2B·영업형 → "도입 상담 신청"**, **셀프서브 제품 → "먼저 써보기 신청"**. 약한 "문의하기/신청하기" 단독은 쓰지 말 것.
 3b. **브랜딩 정리 (서비스명 자동 확정)** — 캔버스에 브랜드명 있으면 그것, **없으면 컨셉에서 짧은 임시 서비스명 1개를 생성**(예: 재방문 알림→"펫리마인드"). 그 이름으로 **`[서비스명]`·"AstroDeck" 을 전부 치환**(Logo·Footer·`<title>`·CTA 카피 등 모든 위치 — 남기지 말 것). 네비는 랜딩 앵커로. (헤더 GitHub 버튼은 포크에서 이미 제거됨.) **생성한 이름은 출력에서 밝힘.**
@@ -44,15 +47,15 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
    - ※ "구글 계정만 주면 완전 자동"은 구글 OAuth·배포 승인 구조상 **불가능**하다. 이 점을 정직히 밝히되, 사용자 몫은 클릭 몇 번 + URL 1개로 최소화하고 나머지는 내가 한다.
    - ⚠️ **두 함정을 안내에 반드시 포함**: ①**개인 계정 필수**(회사·Workspace는 익명 접근 차단→401, 설정 '모든사용자'여도 안 됨) ②배포 시 **"확인되지 않은 앱" 보안경고 → 고급 → 허용**(배포자 1회만, 신청자엔 안 보임).
    - URL 받은 뒤 검증: `curl -sS -L -X POST <url> --data 'name=t&contact=t'` 응답이 **401이면 회사 계정**(개인으로 다시), 302/200이면 정상. 시트에 테스트 행 뜨는지 사용자에게 확인 요청 + 그 행 삭제 안내.
-4. **빌드 & 프리뷰** — `npm run build` → `npm run preview`(백그라운드). 주소: `http://localhost:4321/templates/<선택>/`.
-   - ⚠️ 빌드본은 절대경로라 file:// 직접 열기 X → 반드시 프리뷰 서버로.
-5. 렌더 확인(우리 카피가 dist에 들어갔는지 grep). 빌드본 `dist/templates/<선택>/` 을
-   `ideas/<slug>/landing/` 으로 복사해 보존. 그 후 채팅 출력.
+4. **빌드 & 프리뷰 (아이디어별 독립 포트)** — `ideas/<slug>/site/` 안에서 `npm run build` → `npm run preview -- --port <빈포트>`(백그라운드).
+   - **포트는 자동으로 빈 것 선택**: 4321부터 쓰되 점유돼 있으면(다른 아이디어 프리뷰가 살아있음) 4322, 4323… 으로. 이전 아이디어 프리뷰를 죽이지 않는다.
+   - 주소: `http://localhost:<빈포트>/templates/<선택>/`. ⚠️ 빌드본은 절대경로라 file:// 직접 열기 X → 반드시 프리뷰 서버로.
+5. 렌더 확인(우리 카피가 `ideas/<slug>/site/dist`에 들어갔는지 grep). 결과물은 이미 `ideas/<slug>/site/`에 독립 보존됨(별도 복사 불필요). 그 후 채팅 출력.
 
 ## 채팅 출력 형식 (짧게)
 ```
-✅ <선택>룩으로 검증용 랜딩 생성 (데이터만 교체, 원본 룩 유지)
-프리뷰: http://localhost:4321/templates/<선택>/
+✅ <선택>룩으로 검증용 랜딩 생성 (ideas/<slug>/site/ — 독립, 기존 아이디어 유지)
+프리뷰: http://localhost:<포트>/templates/<선택>/
 왜 이 룩: <한 줄 이유>
 서비스명: <생성/사용한 이름>  (바꾸려면 말하세요)
 히어로 카피: #<N> <스타일>  (다른 카피로 바꾸려면 번호만 말하세요)
