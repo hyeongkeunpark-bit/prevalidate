@@ -18,7 +18,8 @@ cp -n .env.example .env                # PUBLIC_SIGNUP_ENDPOINT 채우기(구글
 npm run build && npm run preview       # preview: http://localhost:4321/
 ```
 - node 18+ 필요(검증: node 22 / npm 10).
-- **캐시 포인트**: `prevalidate-landing/` 재사용 → clone 생략, `node_modules` 재사용 → install 생략. 첫 실행만 무겁고, 다음부터는 **빌드만(수 초)**. 아이디어 바뀌어도 데이터만 다시 교체 후 build.
+- **캐시 포인트**: `prevalidate-landing/` 재사용 → clone 생략, `node_modules` 재사용 → install 생략. 첫 실행만 무겁고, 다음부터는 **빌드만(수 초)**.
+- ⚠️ **캐시 재사용 시 이전 아이디어 오염 주의**: 폴더에 지난 아이디어 데이터가 박혀 있으니, 데이터 교체 전에 `git checkout -- src/` 로 중립 원본 복원 후 새로 채운다(놓친 필드에 지난 서비스명·문구가 남는 것 방지). `.env`(엔드포인트)는 git 추적 안 되니 보존됨.
 
 ## 랜딩용 템플릿 3개 (이 중 **1개만** 골라 교체·빌드)
 3개가 유사해 전부 만들 필요 없다. 목적에 맞는 1개만(선택 기준 = landing SKILL.md "템플릿 선택").

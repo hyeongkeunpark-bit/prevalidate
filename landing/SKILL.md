@@ -30,6 +30,7 @@ description: 채운 린캔버스 + 키카피를 바탕으로 검증용 랜딩을
    - **룩·카피 왜 골랐는지 한 줄** 준비(둘 다 나중에 밝힘).
 2. **레포 준비 (캐시 재사용)** — cwd에서: `prevalidate-landing/` 있으면 **clone 생략**, `node_modules` 있으면 **install 생략**. 최초만 clone+install, 이후엔 빌드만(수 초).
    `[ -d prevalidate-landing ] || git clone --depth 1 https://github.com/hyeongkeunpark-bit/prevalidate-landing.git` → `cd prevalidate-landing` → `[ -d node_modules ] || npm install`.
+   - ⚠️ **캐시 재사용이면 이전 아이디어 데이터 리셋 필수**: `git checkout -- src/` 로 `src/`(templates·Logo·Header·Footer·SEO)를 **중립 원본으로 되돌린 뒤** 새 아이디어를 채운다. 안 그러면 지난 아이디어 잔재(예: 이전 서비스명·문구)가 놓친 필드에 남는다. `.env`는 git 추적 안 되니 **엔드포인트는 보존**됨(재입력 불필요).
 3. **데이터 교체 (고른 1개만)** — `src/pages/templates/<선택>.astro` 상단 JS 객체와 히어로/CTA 카피를 우리 내용으로. 컴포넌트·CSS는 안 건드림. **나머지 2개 템플릿·신청 폼(Signup)은 손대지 않는다**(CTA는 이미 `#signup`로 연결됨).
    - 매핑·prop 치트시트는 참조파일. **Hero title = 선택한 키카피**(지정/자동), subtitle = UVP 보조 문구. Solution=features, 기존대안=Comparison, Problem=ContentBlock, Revenue=tiers, 얼리어답터=Testimonials.
    - **CTA 라벨** (hero primaryCta · 최종 CTA · `<Signup title=… buttonText=… />` 를 **일치**시킴): 아이템에 맞게 — **B2B·영업형 → "도입 상담 신청"**, **셀프서브 제품 → "먼저 써보기 신청"**. 약한 "문의하기/신청하기" 단독은 쓰지 말 것.
